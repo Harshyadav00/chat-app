@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router';
 
 const PublicRoute = () => {
 
-    const profile = false;
+    const profile = true;
 
     if (!profile) {
         return <Navigate to="/" />;
