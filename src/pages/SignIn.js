@@ -1,15 +1,24 @@
 import React from 'react';
 import { Container, Grid, Row, Panel, Col, Button } from 'rsuite';
-import { auth } from '../misc/firebase' ;
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-
+import { auth, database } from '../misc/firebase' ;
+import { GoogleAuthProvider, getAdditionalUserInfo, signInWithPopup } from 'firebase/auth';
+import { ref, set } from 'firebase/database';
 
 const SignIn = () => {
 
   const signInWithProvider = async (provider) => {
     signInWithPopup(auth, provider)
     .then((res) => {
-        console.log(res) ;
+        console.log(res);
+        const user = res.user ;
+        if(getAdditionalUserInfo(res).isNewUser){
+            console.log("true");
+            set(ref(database, 'profiles/'+user.uid),{
+              name : user.displayName,
+              createdAt : user.metadata.createdAt
+            });
+        }
+
     }).catch((err) => {
       console.log(err) ;
     });
