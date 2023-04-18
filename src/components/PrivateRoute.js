@@ -1,11 +1,22 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router';
+import { useProfile } from '../context/profile.context';
+import { Container, Loader } from 'rsuite';
 
-const PrivateRoute = () => {
+const PrivateRoute = (children, ...routeProps) => {
 
-    const profile = false;
+    const { profile, isLoading } = useProfile() ;
 
-    if (!profile) {
+
+    if(isLoading && !profile ){
+        return (
+            <Container>
+                <Loader center vertical size="md" content="Loading" speed='slow'  />
+            </Container>
+        )
+    }
+
+    if (!profile && !isLoading) {
         return <Navigate to="/signin" />;
     }
 

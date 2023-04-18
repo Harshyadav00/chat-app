@@ -8,17 +8,20 @@ import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import { ProfileProvider } from './context/profile.context';
 
 function App() {
   return (
-    <Routes>
+    <ProfileProvider>
+      <Routes>
         <Route path="/signin" element={<PublicRoute />}>
-            <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn />} />
         </Route>
-      <Route path="/" element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} />
-      </Route>
-    </Routes>
+        <Route path="/" element={<PrivateRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>
+    </ProfileProvider>
   );
 }
 

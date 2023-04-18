@@ -3,8 +3,11 @@ import { Container, Grid, Row, Panel, Col, Button } from 'rsuite';
 import { auth, database } from '../misc/firebase' ;
 import { GoogleAuthProvider, getAdditionalUserInfo, signInWithPopup } from 'firebase/auth';
 import { ref, set } from 'firebase/database';
+import { useProfile } from '../context/profile.context';
 
 const SignIn = () => {
+
+  const profile = useProfile() ;
 
   const signInWithProvider = async (provider) => {
     signInWithPopup(auth, provider)
