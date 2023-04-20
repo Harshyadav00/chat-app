@@ -8,30 +8,35 @@ const ProfileContext = createContext();
 export const ProfileProvider = ({ children }) => {
 
     const [profile, setProfile] = useState(null);
-    const [isLoading, setIsLoading] = useState(true) ;
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
 
-        let profileRef ;
+        let profileRef;
         const authUnsubscribe = auth.onAuthStateChanged((authObj) => {
             if (authObj) {
 
                 profileRef = ref(database, `profiles/${authObj.uid}`);
 
                 onValue(profileRef, (snapshot) => {
-                    const {name, createAt} = snapshot.val(); // retrieve the value from the snapshot
-                    
-                    const data = {
-                        name,
-                        createAt,
-                        uid : authObj.uid,
-                        email : authObj.email,
-                    };
-                    
-                    // update the state with the retrieved data
-                    console.log(data);
+                    const profileData = snapshot.val();
 
-                    setProfile(data);
+                    if (profileData) {
+
+                        const { name, createAt } = snapshot.val(); // retrieve the value from the snapshot
+
+                        const data = {
+                            name,
+                            createAt,
+                            uid: authObj.uid,
+                            email: authObj.email,
+                        };
+
+                        // update the state with the retrieved data
+                        console.log(data);
+
+                        setProfile(data);
+                    }
                     setIsLoading(false);
                 });
 
@@ -42,7 +47,7 @@ export const ProfileProvider = ({ children }) => {
                 }
 
                 setProfile(null);
-                setIsLoading(false) ;
+                setIsLoading(false);
             }
 
         })
@@ -50,18 +55,18 @@ export const ProfileProvider = ({ children }) => {
 
         return () => {
 
-            authUnsubscribe() ;
-            
+            authUnsubscribe();
+
             if (profileRef) {
                 off(profileRef);
             }
 
         };
-    },[])
+    }, [])
 
 
     return (
-        <ProfileContext.Provider value={ { isLoading, profile } }>
+        <ProfileContext.Provider value={{ isLoading, profile }}>
             {children}
         </ProfileContext.Provider>
     );

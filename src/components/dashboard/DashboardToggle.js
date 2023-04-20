@@ -4,6 +4,7 @@ import DashboardIcon from '@rsuite/icons/Dashboard';
 import { useMediaQuery, useModalState } from '../../misc/custom-hooks';
 import Dashboard from '.';
 import { auth } from '../../misc/firebase';
+import { toast } from 'react-toastify';
 
 const DashboardToggle = () => {
 
@@ -13,8 +14,9 @@ const DashboardToggle = () => {
   const onSignOut = useCallback(() => {
 
       auth.signOut();
+      toast.success('Logged out')
       close();
-      return(
+      return( 
         <Notification type='success'>Sign out</Notification>
       )
 
